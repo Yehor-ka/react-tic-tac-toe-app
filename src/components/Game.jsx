@@ -16,17 +16,24 @@ const Game = () => {
     secondUserCount: 0,
   });
   const [isOpenBeginSetting, setIsOpenBeginSettings] = React.useState(false);
+  const [stepsCounter, setStepsCounter] = React.useState(0);
+  const [winPos, setWinPos] = React.useState([]);
 
-  const winner = calculateWinner(board);
+  const { winner, arr } = React.useMemo(() => calculateWinner(board), [board]);
 
   React.useEffect(() => {
     setIsOpenBeginSettings(true);
   }, []);
 
   React.useEffect(() => {
-    if (winner) {
+    setWinPos(arr);
+  }, [arr]);
+
+  React.useEffect(() => {
+    if (winner !== null) {
       setIsOpenResult(true);
       setIsXNest(true);
+      setStepsCounter(0);
       if (winner === 'X') {
         setUsersConfig((prevState) => ({
           ...prevState,
@@ -38,12 +45,16 @@ const Game = () => {
           secondUserCount: prevState.secondUserCount + 1,
         }));
       }
+    } else if (winner === null && stepsCounter === 9) {
+      setIsOpenResult(true);
+      setStepsCounter(0);
     }
   }, [board]);
 
   const handleStep = (index) => {
     const newBoard = [...board];
     if (winner || newBoard[index]) return;
+    setStepsCounter((prevState) => prevState + 1);
 
     newBoard[index] = isXNext ? 'X' : 'O';
 
@@ -55,23 +66,10 @@ const Game = () => {
     setBoard(Array(9).fill(null));
   };
 
-  const isDraw = () => {
-    let boardIsFull = false;
-    for (let i = 0; i < board.length; i++) {
-      if (board[i]) {
-        boardIsFull = false;
-        break;
-      } else {
-        boardIsFull = true;
-      }
-    }
-    if (!winner && boardIsFull) alert('Ничья');
-  };
-
   return (
     <>
       <div className="wrapper">
-        <Board board={board} handleStep={handleStep} />
+        <Board board={board} handleStep={handleStep} winPos={winPos} />
         <Score usersConfig={usersConfig} />
       </div>
       <ModalResult
@@ -80,6 +78,7 @@ const Game = () => {
         isOpenResult={isOpenResult}
         setIsOpenResult={setIsOpenResult}
         winner={winner}
+        stepsCounter={stepsCounter}
       />
       <SetUsersModal
         isOpenBeginSetting={isOpenBeginSetting}
