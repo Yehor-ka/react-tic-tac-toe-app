@@ -32,7 +32,7 @@ const SetUsersModal = ({ isOpenBeginSetting, setUsersConfig, setIsOpenBeginSetti
           onChange={onChangeInput}
         />
         <TextField name="secondUsername" label="Second Username" type="text" fullWidth onChange={onChangeInput} />
-        <Button style={{marginTop: 15}} variant="contained" color="primary" onClick={handleAddPlayers}>
+        <Button style={{marginTop: 15}} variant="contained" color="secondary" onClick={handleAddPlayers}>
           Add players
         </Button>
       </DialogContent>

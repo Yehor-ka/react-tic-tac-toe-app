@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent } from '@material-ui/core';
+import { Dialog, DialogContent, Button } from '@material-ui/core';
 
 const ModalResult = ({
   isOpenResult,
@@ -11,7 +11,7 @@ const ModalResult = ({
 }) => {
   const handleClose = () => {
     setIsOpenResult(false);
-    newGame();
+    setTimeout(newGame, 100)
   };
   return (
     <Dialog open={isOpenResult} onClose={handleClose}>
@@ -23,6 +23,7 @@ const ModalResult = ({
         ) : (
           <h2>It`s draw</h2>
         )}
+        <Button style={{marginTop: 15}} variant="outlined" color="primary" onClick={handleClose}>New Game</Button>
       </DialogContent>
     </Dialog>
   );
