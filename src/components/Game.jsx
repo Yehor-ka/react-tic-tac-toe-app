@@ -4,6 +4,7 @@ import Score from './Score';
 import { calculateWinner } from '../calcWinner';
 import ModalResult from './ModalResult';
 import SetUsersModal from './SetUsersModal';
+import { getLineThrough } from '../getLineThrough';
 
 const Game = () => {
   const [board, setBoard] = React.useState(Array(9).fill(null));
@@ -17,7 +18,7 @@ const Game = () => {
   });
   const [isOpenBeginSetting, setIsOpenBeginSettings] = React.useState(false);
   const [stepsCounter, setStepsCounter] = React.useState(0);
-  const [winPos, setWinPos] = React.useState([]);
+  const [lineThroughStyle, setLineThroughStyle] = React.useState({});
 
   const { winner, arr } = React.useMemo(() => calculateWinner(board), [board]);
 
@@ -26,7 +27,7 @@ const Game = () => {
   }, []);
 
   React.useEffect(() => {
-    setWinPos(arr);
+    setLineThroughStyle(getLineThrough(arr));
   }, [arr]);
 
   React.useEffect(() => {
@@ -69,7 +70,7 @@ const Game = () => {
   return (
     <>
       <div className="wrapper">
-        <Board board={board} handleStep={handleStep} winPos={winPos} />
+        <Board lineThroughStyle={lineThroughStyle} board={board} handleStep={handleStep} />
         <Score usersConfig={usersConfig} />
       </div>
       <ModalResult
